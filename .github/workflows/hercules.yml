@@ -31,7 +31,8 @@ jobs:
             --output-path ./opt/output \
             --test-data-path ./opt/test_data \
             --llm-model gpt-4o \
-            --llm-model-api-key $OPENAI_API_KEY
+            --llm-model-api-key ${{ secrets.OPENAI_API_KEY }}
+
 
       - name: Upload test reports
         uses: actions/upload-artifact@v4
