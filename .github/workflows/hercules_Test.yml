@@ -1,0 +1,40 @@
+name: Run Hercules Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  hercules-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install testzeus-hercules
+          playwright install --with-deps
+
+      - name: Run Hercules tests
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          testzeus-hercules \
+            --input-file ./opt/input/login.feature \
+            --output-path ./opt/output \
+            --test-data-path ./opt/test_data \
+            --llm-model gpt-4o \
+            --llm-model-api-key $OPENAI_API_KEY
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: hercules-report
+          path: ./opt/output/
