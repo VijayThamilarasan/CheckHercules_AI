@@ -23,15 +23,16 @@ jobs:
           playwright install --with-deps
 
       - name: Run Hercules tests
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          testzeus-hercules \
-            --input-file ./opt/input/login.feature \
-            --output-path ./opt/output \
-            --test-data-path ./opt/test_data \
-            --llm-model gpt-4o \
-            --llm-model-api-key ${{ secrets.OPENAI_API_KEY }}
+  env:
+    AUTO_MODE: 1
+  run: |
+    testzeus-hercules \
+      --input-file ./opt/input/login.feature \
+      --output-path ./opt/output \
+      --test-data-path ./opt/test_data \
+      --llm-model gpt-4o \
+      --llm-model-api-key ${{ secrets.OPENAI_API_KEY }}
+
 
 
       - name: Upload test reports
